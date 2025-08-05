@@ -1,195 +1,152 @@
 <template>
   <q-layout view="hhh lpr fff">
     <q-page-container>
-      <q-page class="q-pa-xl text-white relative-position overflow-hidden franklin" style="background-color: black;">
-        <div class="q-mx-auto relative-position" style="max-width: 1000px; z-index: 1">
+      <q-page class="q-pa-xl bg-dark text-white relative-position overflow-hidden">
+        <div class="page-container">
           
-          <!-- Título -->
-          <section
-            class="glass-card q-pa-xl q-mb-xl text-center section-card"
-            :style="{ backgroundImage: `url('https://i.pinimg.com/1200x/45/b4/2b/45b42b43e05f302fcfa111cdf1a9907c.jpg')` }"
-          >
+          <!-- Seção do título principal -->
+          <section class="glass-card q-pa-xl q-mb-xl text-center section-card">
+            <!-- Título da página -->
             <h3 class="text-h3 q-mb-md">Personagens</h3>
+            <!-- Descrição da página -->
             <p class="text-h5">Conheça os personagens da galáxia muito, muito distante.</p>
           </section>
 
-          <!-- Grid 3x3 de cards -->
-          <div class="personagens-grid">
-  <div
-    v-for="person in people"
-    :key="person.uid"
-    class="personagem-card glass-card"
-    @click="openModal(person.url)" 
-  >
-    <h3 class="personagem-nome">{{ person.name }}</h3>
-  </div>
-  </div>
+          <!-- Grid para exibir os cards dos personagens -->
+          <div class="page-grid">
+            <!-- Loop para criar um card para cada personagem -->
+            <div
+              v-for="person in people" 
+              :key="person.uid"
+              class="page-card glass-card"
+              @click="openModal(person.url)"
+            >
+            <!-- itera sobre o array people -->
+            <!-- chave única para cada elemento -->
+            <!-- estilos do card -->
+            <!-- abre o modal com os detalhes do personagem -->
 
-          <!-- Paginação -->
-           <div class="paginacao flex flex-center q-my-xl franklin">
-            <button @click="prevPage" :disabled="page === 1" class="btn-paginacao">
-              &lt;
+              <!-- Nome do personagem -->
+              <h3 class="page-nome">{{ person.name }}</h3>
+            </div>
+          </div>
+
+          <!-- Mensagem de erro condicional, só aparece se error for true -->
+          <div v-if="error" class="error-message">
+            Erro ao carregar personagens. Tente novamente.
+          </div>
+
+          <!-- Área da paginação -->
+          <div class="paginacao flex flex-center q-my-xl">
+            <!-- Botão para página anterior -->
+            <button
+              @click="prevPage"
+              :disabled="page === 1"
+              class="btn-paginacao"
+              aria-label="Página anterior"
+            >
+            <!-- chama função para voltar página -->
+            <!-- desabilita se estiver na primeira página -->
+              &lt;  <!-- símbolo de "<" -->
             </button>
 
+            <!-- Exibe a página atual -->
             <span class="pagina-atual">{{ page }}</span>
 
-            <button @click="nextPage" :disabled="page === totalPages" class="btn-paginacao">
-              &gt;
+            <!-- Botão para próxima página -->
+            <button
+              @click="nextPage"
+              :disabled="page === totalPages"
+              class="btn-paginacao"
+              aria-label="Próxima página"
+            >
+            <!-- chama função para avançar página -->
+            <!-- desabilita se estiver na última página -->
+              &gt; <!-- símbolo de ">" -->
             </button>
           </div>
         </div>
 
-                <!-- Modal de personagem -->
-  <ModalView v-model="showModal" :item-url="selectedUrl" />
-
+        <!-- Componente modal que exibe detalhes do personagem selecionado -->
+        <ModalView v-model="showModal" :item-url="selectedUrl" />
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import ModalView from '../components/ModalView.vue'
+import { ref, watch, onMounted } from 'vue' // Importa APIs reativas e ciclo de vida do Vue
+import ModalView from '../components/ModalView.vue' // Importa componente modal para detalhes
 
+// Estado reativo da página atual (começa na 1)
 const page = ref(1)
+// Array de personagens carregados da API
 const people = ref([])
+// Total de páginas retornadas pela API (padrão 1)
 const totalPages = ref(1)
+// Estado de erro na requisição
+const error = ref(false)
 
+// Estado para controle da exibição do modal (true = modal aberto)
 const showModal = ref(false)
+// URL do personagem selecionado para carregar no modal
 const selectedUrl = ref('')
 
+// Função para buscar personagens na API SWAPI com paginação
 const fetchPeople = async () => {
+  error.value = false // reseta o erro a cada nova requisição
   try {
+    // Faz a requisição à API, buscando 9 personagens por página
     const response = await fetch(`https://swapi.tech/api/people?page=${page.value}&limit=9`)
     const data = await response.json()
-    people.value = data.results || []
-    totalPages.value = data.total_pages || 1
-  } catch (error) {
-    console.error('Erro ao carregar personagens:', error)
+    people.value = data.results || [] // atualiza lista de personagens
+    totalPages.value = data.total_pages || 1 // atualiza total de páginas da API
+  } catch (erro) {
+    error.value = true // ativa mensagem de erro em caso de falha
+    console.error('Erro ao carregar personagens:', erro) // log para debug
   }
 }
 
+// Função que abre o modal passando a URL do personagem
 function openModal(url) {
   selectedUrl.value = url
   showModal.value = true
 }
 
+// Função para ir para a página anterior (se possível)
 function prevPage() {
   if (page.value > 1) {
-    page.value--
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    page.value-- // decrementa página
+    window.scrollTo({ top: 0, behavior: 'smooth' }) // rola para topo suavemente
   }
 }
 
+// Função para ir para a próxima página (se possível)
 function nextPage() {
-  if (page.value < totalPages.value) {
-    page.value++
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  if (page.value < totalPages.value) { 
+    page.value++ // incrementa página
+    window.scrollTo({ top: 0, behavior: 'smooth' }) // rola para topo suavemente
   }
 }
 
-// Quando a página mudar, busca os personagens
+// Quando a página mudar, chama fetchPeople para carregar novos personagens
 watch(page, fetchPeople)
 
-// Busca inicial ao montar o componente
+// Busca inicial dos personagens quando componente montar
 onMounted(fetchPeople)
 </script>
 
 <style scoped>
-.franklin {
-  font-family: 'Franklin Gothic Medium', 'Franklin Gothic', sans-serif !important;
-  text-shadow: none !important;
-}
-
 /* Título e descrição com background */
 .section-card {
-  background-repeat: no-repeat;
-  background-size: cover;
   background-position: center center;
-  min-height: 300px;
-  border-radius: 16px;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-}
-
-.section-card h3,
-.section-card p {
-  margin: 0 2rem;
-}
-
-/* Grid dos personagens - 3x3 */
-.personagens-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* responsivo e flexível */
-  gap: 24px 32px;
-  margin-bottom: 2rem;
-}
-
-/* Card individual */
-.personagem-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-  font-weight: 600;
-  font-size: 1.25rem;
-  transition: background 0.3s;
-  cursor: pointer;
-}
-
-/* Nome do personagem com espaçamento e centralizado */
-.personagem-nome {
-  margin: 0;
-  letter-spacing: 0.05em;
-}
-
-.paginacao {
-  gap: 2rem;
-}
-
-.btn-paginacao {
-  background: transparent;
-  color: white;
-  font-family: 'Franklin Gothic Medium', 'Franklin Gothic', sans-serif;
-  font-size: 2rem;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s;
-  text-shadow: none;
-}
-
-.btn-paginacao:hover {
-  transform: scale(1.2);
-}
-
-.btn-paginacao:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.pagina-atual {
-  font-size: 2rem;
-  font-family: 'Franklin Gothic Medium', 'Franklin Gothic', sans-serif;
-  text-shadow: none;
+  background-image: url('https://i.pinimg.com/1200x/45/b4/2b/45b42b43e05f302fcfa111cdf1a9907c.jpg');
 }
 
 /* Responsividade pra mobile */
-@media (max-width: 700px) {
-  .glass-card h3{
+@media (max-width: 767px) {
+  .glass-card h3 {
     margin-left: -20px;
-  }
-  .personagens-grid {
-    grid-template-columns: 1fr;
-    gap: 16px 0;
-  }
-
-  .personagem-card {
-    font-size: 1.1rem;
-    padding: 1rem;
   }
 }
 </style>
-
