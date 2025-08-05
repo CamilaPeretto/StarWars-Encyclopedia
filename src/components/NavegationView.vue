@@ -1,6 +1,12 @@
 <template>
-  <q-page class="q-pa-xl bg-dark text-white relative-position overflow-hidden">
-    <div class="page-container">
+  <!-- Cabeçalho da seção -->
+  <div>
+    <h3 class="text-h3 q-mb-md">{{ title }}</h3>
+    <p class="text-h5">{{ description }}</p>
+  </div>
+
+  <!-- Conteúdo principal da grid + paginação -->
+  <div class="page-container">
       
       <!-- Grid para exibir os cards dos itens -->
       <div class="page-grid">
@@ -59,7 +65,7 @@
 
     <!-- Componente modal que exibe detalhes do personagem selecionado -->
     <ModalView v-model="showModal" :item-url="selectedUrl" />
-  </q-page>
+  
 </template>
 
 <script setup>

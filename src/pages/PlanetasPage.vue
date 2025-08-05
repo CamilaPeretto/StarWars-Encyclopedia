@@ -5,13 +5,12 @@
         <div class="page-container">
           <!-- Seção do título principal -->
           <section class="glass-card q-pa-xl q-mb-xl text-center section-card">
-            <!-- Navegação das páginas -->
-            <NavegationView
-              endpoint="planets"
-              title="Planetas"
-              description="Conheça os planetas incríveis da galáxia muito, muito distante."
-            />
+            <h3 class="text-h3 q-mb-md">Planetas</h3>
+            <p class="text-h5">Conheça os planetas incríveis da galáxia muito, muito distante.</p>
           </section>
+
+          <!-- Lista paginada com modal -->
+          <NavegationView endpoint="planets" />
         </div>
       </q-page>
     </q-page-container>
