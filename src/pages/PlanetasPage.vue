@@ -27,4 +27,3 @@ import NavegationView from '../components/NavegationView.vue'
   background-image: url('https://i.pinimg.com/1200x/f6/00/ce/f600cef8a02b9dbe6afe15e61cdc9498.jpg');
 }
 </style>
-

@@ -8,7 +8,7 @@
             <h3 class="text-h3 q-mb-md">Personagens</h3>
             <p class="text-h5">Conheça os personagens da galáxia muito, muito distante.</p>
           </section>
-          
+
           <!-- Lista paginada com modal -->
           <NavegationView endpoint="people" />
         </div>
@@ -33,4 +33,3 @@ import NavegationView from '../components/NavegationView.vue'
   }
 }
 </style>
-
