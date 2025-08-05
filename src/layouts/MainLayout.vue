@@ -12,4 +12,3 @@
 import Navbar from '../components/NavbarView.vue'
 import Footer from '../components/FooterView.vue'
 </script>
-

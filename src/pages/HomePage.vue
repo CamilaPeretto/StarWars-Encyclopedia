@@ -1,11 +1,11 @@
 <template>
   <q-layout view="hhh lpr fff">
     <q-page-container>
-      <q-page class="q-pa-xl text-white relative-position overflow-hidden" style="background-color: black;">
- 
+      <q-page class="q-pa-xl text-white relative-position overflow-hidden">
+        
         <!-- HERO SECTION -->
         <section class="hero-section row q-pa-none q-px-md q-pt-xl text-left-md">
-          <div class=" col-12 col-md-6  text-left-md">
+          <div class="col-12 col-md-6 text-left-md">
             <h1 class="hero-title text-weight-bold text-yellow-6">
               Venha conhecer o universo de Star Wars
             </h1>
@@ -15,7 +15,9 @@
           </div>
         </section>
 
-        <div class="q-mx-auto q-gutter-xl relative-position franklin" style="max-width: 1200px">
+        <!-- Container para seções descritivas -->
+        <div class="q-mx-auto q-gutter-xl relative-position page-content">
+          
           <!--Sobre o projeto-->
           <section class="glass-card q-pa-xl">
             <h3 class="section-title">Sobre o Projeto</h3>
@@ -38,6 +40,7 @@
             </p>
           </section>
 
+          <!-- Onde Assistir -->
           <section class="glass-card q-pa-xl">
             <h3 class="section-title">Onde Assistir</h3>
             <p class="section-text">
@@ -48,6 +51,7 @@
           </section>
         </div>
 
+        <!-- Componente de visualização de cards com navegação habilitada -->
         <CardsView :items="cards" :isNavigation="true" />
       </q-page>
     </q-page-container>
@@ -55,8 +59,10 @@
 </template>
 
 <script setup>
+// Importa o componente de visualização dos cards
 import CardsView from '../components/CardsView.vue'
 
+// Lista de cards que será renderizada no CardsView
 const cards = [
   {
     id: 1,
@@ -83,12 +89,16 @@ const cards = [
 </script>
 
 <style scoped>
+
+.page-content {
+  max-width: 1200px;
+}
 .hero-section {
   background-image: url('https://i.ibb.co/zhTy8ZnJ/freepik-the-style-is-candid-image-photography-with-natural-90070.png');
-  background-size: cover; 
-  background-position: center 1%; 
+  background-size: cover;
+  background-position: center 1%;
   min-height: 85vh;
-  min-width: 100vw; 
+  min-width: 100vw;
   padding-top: 300px;
   background-repeat: no-repeat;
 }
@@ -104,24 +114,11 @@ const cards = [
   color: #ddd;
 }
 
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-shadow: 0 0 15px #fffb00;
-}
-
-.section-text {
-  font-size: 1.4rem;
-  line-height: 1.8;
-  color: #ddd;
-}
-
 @media (max-width: 700px) {
   .hero-section {
-  min-width: 95vw;
-  padding-top: 300px;
-  margin-left: -20px;
+    min-width: 95vw;
+    padding-top: 300px;
+    margin-left: -20px;
   }
 
   .hero-title {

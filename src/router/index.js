@@ -6,7 +6,7 @@ const router = createRouter({
   routes,
   scrollBehavior() {
     return { top: 0 }
-  }
+  },
 })
 
 export default router
